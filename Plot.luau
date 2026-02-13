@@ -287,15 +287,7 @@ function Plot:LoadData()
     -- Load the tier
     local tier = PlotProfileStore:GetTierData(self.owner)
     if tier > self.maxTier then
-        self.tier = self.maxTier -- If the max tier ceiling was lowered we set the tier to maxTier so it doesn't go above that
-        -- Possible scenarios:
-        -- Player had self.maxPlants before the nerf.
-        -- self.plants = 30, self.maxPlants = 25
-        -- The player have more plants that any new beginner
-        -- New plants get added because of an update.
-        -- Player can't plant new plants because he exceeds the limit.
-        -- Player will need to remove plants.
-        -- So we don't have to worry about this problem because self.maxTier won't be getting nerfed but just in case we set it to the maxTier
+        self.tier = self.maxTier -- If somehow the tier is higher than the max tier we set it to max tier. This prevents some weird glitches
     else   
         self.tier = tier -- if not we load it in normally
     end
