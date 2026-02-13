@@ -404,7 +404,7 @@ function Plot:CanDestroyPlant(plr, plant)
     return true
 end
 
-local function findPlantIndex(plants, target) : number
+local function findPlantIndex(plants, target) : number?
     for i, plant in ipairs(plants) do
         if plant.Model == target or plant.Model.PrimaryPart == target then  -- We use plant.Model because the target will be a model from the workspace not the plant class
             return i
