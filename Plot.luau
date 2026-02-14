@@ -202,7 +202,7 @@ function Plot:UnclaimPlot()
 	self.OnUnclaim:Fire(self.owner) -- Let the server know the player no longer owns this plot
 
 	-- Make sure it is closed
-	-- We check if the coroutines exist because there might be an error that prevented coroutines to not work
+	-- We check if the coroutines exist because there might be an error or bug that prevented coroutines to not be created
 	-- We also don't stop it if it's already stopped
 	if self.growCoroutine and coroutine.status(self.growCoroutine) ~= "dead" then
 		coroutine.close(self.growCoroutine)
