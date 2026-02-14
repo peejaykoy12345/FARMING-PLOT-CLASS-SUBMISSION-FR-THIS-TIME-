@@ -84,7 +84,7 @@ function Plot:StartCoroutine(coroutineName: string, coroutineFunction: () -> ())
 	-- This makes it so that the coroutine is fresh and nothing is left off of the last player plot
 	if self[coroutineName] and coroutine.status(self[coroutineName]) ~= "dead" then -- Prevent unexpected bugs on runtime
 		self.stopCoroutine = true -- Break loop first
-		coroutine.close(self[coroutineName) -- Then stop coroutine
+		coroutine.close(self[coroutineName]) -- Then stop coroutine
 	end
 
 	self.stopCoroutine = false  -- Reset flag
