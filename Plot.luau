@@ -83,10 +83,11 @@ function Plot:StartCoroutine(coroutineName: string, coroutineFunction: () -> ())
 	-- and start a new one.
 	-- This makes it so that the coroutine is fresh and nothing is left off of the last player plot
 	if self[coroutineName] and coroutine.status(self[coroutineName]) ~= "dead" then -- Prevent unexpected bugs on runtime
-		self.stopCoroutine = true -- Break loop first
-		coroutine.close(self[coroutineName]) -- Then stop coroutine
+		coroutine.close(self[coroutineName]) -- stop coroutine
 	end
-
+	
+	-- We don't use different flags for the coroutines because
+	-- these coroutines must stop together not just one.
 	self.stopCoroutine = false  -- Reset flag
 
 	self[coroutineName] = coroutine.create(coroutineFunction)
@@ -272,8 +273,8 @@ function Plot:LoadPlantData()
 
 		-- It checks for -inf or NaN
 		-- Remove ghost plants (Usually happens when testing (if the system is buggy) but not in production)
-		if relativeCFrame.y < -1000000 or relativeCFrame.y ~= relativeCFrame.y then 
-			warn(`Skipping plant with corrupted position: Y = {relativeCFrame.y}`)
+		if relativeCFrame.Y < -1000000 or relativeCFrame.Y ~= relativeCFrame.Y then 
+			warn(`Skipping plant with corrupted position: Y = {relativeCFrame.Y}`)
 			continue
 		end
 
