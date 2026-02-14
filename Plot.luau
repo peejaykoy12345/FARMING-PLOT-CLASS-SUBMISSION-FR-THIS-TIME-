@@ -272,7 +272,7 @@ function Plot:LoadPlantData()
 		local relativeCFrame: CFrame = plantLoadedData.relative_cframe -- Get the relative cframe
 
 		-- It checks for -inf or NaN
-		-- Remove ghost plants (Usually happens when testing (if the system is buggy) but not in production)
+		-- Remove ghost plants (If plant Y is corrupted then it is considered a ghost plant which won't appear in plot and also cause nil errors)
 		if relativeCFrame.Y < -1000000 or relativeCFrame.Y ~= relativeCFrame.Y then 
 			warn(`Skipping plant with corrupted position: Y = {relativeCFrame.Y}`)
 			continue
