@@ -2,7 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Packages = ReplicatedStorage.Packages
 
-local remotes = require(Packages.remotes)
+-- Open source library for creating and fetching remotes
+local remotes = require(Packages.remotes) 
 
 -- Uses profile store for reliable datastore
 local PlotProfileStore = require(script.PlotProfileStore) -- For the datastore (e.g plant cframe and growth)
@@ -24,6 +25,7 @@ local PlantsData = require(SharedFolder.PlantsData)
 -- and makes it so that other scripts can use these utils
 local TableUtils = require(SharedFolder.TableUtils)
 
+-- If the event doesn't exist yet remotes module creates it but only if it's ran on the server
 -- Client event for sending notifications
 local NotifEvent: RemoteEvent = remotes:getEventAsync("Notification")
 
@@ -240,6 +242,7 @@ function Plot:GetPlantData()
 		local relative_cframe = self.plot:GetPivot():ToObjectSpace(plant.PrimaryPart.CFrame)
 
 		plantData.plantName = plant.Name -- Store plant name so we can rebuilt it again when it loads
+		-- On PlotProfileStore CFrame is converted to a table because we can't datastore cframes
 		plantData.relative_cframe = relative_cframe -- Store the relative cframe
 		plantData.Growth = plant.Growth -- Then the growth so the plants still stay the same after loading not just position wise
 
@@ -269,6 +272,7 @@ function Plot:LoadPlantData()
 			continue 
 		end
 
+		-- When loading, the table cframe is converted to cframe automatically when being fetched through PlotProfileStore
 		local relativeCFrame: CFrame = plantLoadedData.relative_cframe -- Get the relative cframe
 
 		-- It checks for -inf or NaN
