@@ -40,22 +40,22 @@ local DEBUG = false
 function Plot.new(params)
 	assert(params.plot, "Plot is needed")
 	local self = setmetatable({}, Plot)
-	
+
 	-- There won't be any owner yet because the plot is only being initialized
 	self.owner = nil  
 	self.plot = params.plot
 	self.plants = {}
-	
+
 	-- Tiers can incrase max plants on a plot and depending on the plant
 	-- it will grow faster.
 	-- For the only plant currently in the game "Brick" the default growth rate is 1
 	-- For tier 2 the growth rate is 2 and so on.
 	self.tier = 1 
 	self.maxTier = 3
-	
+
 	-- So the player can't plant that many plants and actually needs to upgrade tier
 	self.maxPlants = 10
-	
+
 	-- This is where the model of the plants are stored and put in
 	self.plantsFolder = self.plot.Plants
 
@@ -87,13 +87,13 @@ function Plot:StartCoroutine(coroutineName: string, coroutineFunction: () -> ())
 	if self[coroutineName] and coroutine.status(self[coroutineName]) ~= "dead" then -- Prevent unexpected bugs on runtime
 		coroutine.close(self[coroutineName]) -- stop coroutine
 	end
-	
+
 	-- We don't use different flags for the coroutines because
 	-- these coroutines must stop together not just one.
 	self.stopCoroutine = false  -- Reset flag
 
 	self[coroutineName] = coroutine.create(coroutineFunction)
-	
+
 	-- I use coroutines because it offers more control over task.spawn
 	coroutine.resume(self[coroutineName]) -- Start coroutine
 end
@@ -364,20 +364,11 @@ function Plot:CanPlacePlant(plr:Player, pos: Vector3): boolean
 	end
 end
 
--- where_to_place can be a vector 3 or cframe because TryPlacePlant puts in a Vector3 but LoadPlantData puts the CFrame
-function Plot:PlacePlant(plantName: string, where_to_place: Vector3 | CFrame, growth: number?)
+function Plot:PlacePlant(plantName: string, plant_cframe: CFrame, growth: number?)
 	local plantData = TableUtils:CopyTable(PlantsData[plantName])
 	if not plantData then 
 		warn(`{plantName} does not exist in PlantsData`) -- Fallback just in case we mispell when adding new plants
 		return
-	end
-
-	local plant_cframe: CFrame
-	-- If vector3 then we convert it to cframe and if not we set it normally
-	if typeof(where_to_place) == "Vector3" then 
-		plant_cframe = CFrame.new(where_to_place)
-	else
-		plant_cframe = where_to_place
 	end
 
 	-- This is the data outside of the PlantsData
@@ -412,7 +403,7 @@ function Plot:TryPlacePlant(plr: Player, plantName: string, pos: Vector3)
 	end
 
 	-- Place plant here
-	self:PlacePlant(plantName, pos)
+	self:PlacePlant(plantName, CFrame.new(pos))
 end
 
 function Plot:CanDestroyPlant(plr, plant)
