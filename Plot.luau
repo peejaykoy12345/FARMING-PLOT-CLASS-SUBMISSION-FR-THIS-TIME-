@@ -364,6 +364,7 @@ function Plot:CanPlacePlant(plr:Player, pos: Vector3): boolean
 	end
 end
 
+-- where_to_place can be a vector 3 or cframe because TryPlacePlant puts in a Vector3 but LoadPlantData puts the CFrame
 function Plot:PlacePlant(plantName: string, where_to_place: Vector3 | CFrame, growth: number?)
 	local plantData = TableUtils:CopyTable(PlantsData[plantName])
 	if not plantData then 
